@@ -1,13 +1,34 @@
-import React from "react"
-import Card from "./Card"
-import contacts from "../contacts"
-const App = () => {
+import React, { useState } from "react";
+import Header from "./Header";
+import Footer from "./Footer";
+import Note from "./Note";
+import CreateArea from "./CreateArea";
+
+function App() {
+  const [notes, setNotes] = useState([])
+
+  const addNote = newNote => {
+    setNotes(prevNotes => {
+      return [...prevNotes, newNote]
+    })
+  }
+  const deleteNote = id => {
+    setNotes(prevNotes => {
+      return prevNotes.filter((noteItem, index) => {
+        return index !== id
+      })
+    })
+  }
   return (
     <div>
-      <h1 className="heading">My Contacts</h1>
-      <Card name={contacts[0].name} img={contacts[0].imgURL} tel={contacts[0].phone} email={contacts[0].email}/>
-      <Card name={contacts[1].name} img={contacts[1].imgURL} tel={contacts[1].phone} email={contacts[1].email}/>
-      <Card name={contacts[2].name} img={contacts[2].imgURL} tel={contacts[2].phone} email={contacts[2].email}/>
-    </div>)
+      <Header />
+      <CreateArea onAdd = {addNote}/>
+      {notes.map((noteItem, index) => {
+        return <Note key = {index} id ={index} onDelete = {deleteNote} title = {noteItem.title} content = {noteItem.content} />
+      })}
+      <Footer />
+    </div>
+  );
 }
-export default App
+
+export default App;
